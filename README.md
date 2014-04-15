@@ -8,11 +8,13 @@ ChomSky -- A text processing system.
 ###Updates
 
 + GUI updates [20140415]
++ File Input [20140416]
++ Text Formatting [20140416]
 
 ###Development Plan
 
 + File I/O
-+ Text formatting
++ special treatment on numbers and etc.
 + Necessary data structure
 + Processing Rules
 

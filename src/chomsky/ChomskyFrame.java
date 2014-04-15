@@ -2,6 +2,7 @@ package chomsky;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -12,6 +13,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class ChomskyFrame extends JFrame implements ActionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1964200924007490868L;
 	JTextArea originalText;
 	JTextArea processedText;
 	JLabel originalLabel;
@@ -22,6 +27,11 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 	JButton aboutButton;
 	JButton exitButton;
 	JFileChooser chooser;
+	
+	// Text and data container
+	
+	ChomskyText TEXT;
+	ChomskyData DATA;
 
 	
 	public ChomskyFrame()
@@ -102,6 +112,8 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 		exitButton.setLocation(650, 500);
 		exitButton.addActionListener(this);
 		this.add(exitButton);
+		
+		DATA=new ChomskyData();
 	}
 
 	
@@ -120,9 +132,10 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 		{
 			String text=originalText.getText();
 			
-			// change to processing code
-			// this is just simply copy the code
-			processedText.setText(text);
+			TEXT=new ChomskyText(text);
+			//TEXT.process(DATA);
+			
+			processedText.setText(TEXT.formText());
 		}
 		else if (source==loadTextButton)
 		{
@@ -133,13 +146,42 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 		    	inputFile=chooser.getSelectedFile().getAbsolutePath();
 		    else inputFile="";
 		    
-		    if (inputFile.length()!=0)
+		    if (!inputFile.isEmpty())
 		    {
-		    	// read through file
+		    	String text="";
+		    	
+		    	Scanner input=null;
+		    	try
+		    	{
+		    		input=new Scanner(new java.io.File(inputFile));
+		    	}
+		    	catch (Exception ex)
+		    	{
+		    		JOptionPane.showMessageDialog(null, "Wrong", "Invalid file or cannot open", JOptionPane.ERROR_MESSAGE);
+		    	}
+		    	
+		    	while (input.hasNextLine())
+		    	{
+		    		text+=input.nextLine()+"\n";
+		    	}
+		    	
+		    	input.close();
+		    	
+		    	originalText.setText(text);
 		    }
 		}
 		else if (source==exportResultButton)
 		{
+			String text=processedText.getText();
+			
+			if (!text.isEmpty())
+			{
+				// write to file
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Empty data", "Empty data", JOptionPane.ERROR_MESSAGE);
+			}
 			// save to current directory
 			// updated to save dialog
 		}
