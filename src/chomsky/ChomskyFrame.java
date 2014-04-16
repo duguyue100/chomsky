@@ -2,6 +2,7 @@ package chomsky;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -177,6 +178,19 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 			if (!text.isEmpty())
 			{
 				// write to file
+				PrintWriter output=null;
+				try
+				{
+					output=new PrintWriter(new java.io.File("export.txt"));
+				}
+				catch (Exception ex)
+				{
+		    		JOptionPane.showMessageDialog(null, "Wrong", "Invalid file or cannot open", JOptionPane.ERROR_MESSAGE);
+				}
+				
+				output.println(text);
+				JOptionPane.showMessageDialog(null, "The processed text is saved in current directory!", "Text is saved", JOptionPane.INFORMATION_MESSAGE);
+				output.close();
 			}
 			else
 			{
