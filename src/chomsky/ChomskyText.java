@@ -1,7 +1,12 @@
 package chomsky;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+
+import net.didion.jwnl.JWNL;
+import net.didion.jwnl.data.POS;
+import net.didion.jwnl.dictionary.Dictionary;
 
 public class ChomskyText {
 	private String rawText;
@@ -151,11 +156,159 @@ public class ChomskyText {
 		return text;
 	}
 	
+	public ArrayList<Integer> initProcRecord(int size)
+	{
+		ArrayList<Integer> temp=new ArrayList<Integer>();
+		
+		for (int i=0; i<size; i++) temp.add(0);
+		
+		return temp;
+	}
+	
+	public boolean checkMatch(String word, ArrayList<String> wordList)
+	{
+		for (int i=0;i<wordList.size();i++)
+		{
+			if (word.equalsIgnoreCase(wordList.get(i)))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public String lookupBase(String pos, String word)
+	{
+		
+		String propsFile="./resource/jwnl14-rc2/config/file_properties.xml";
+		
+		try
+		{
+			JWNL.initialize(new FileInputStream(propsFile));
+		}
+		catch (Exception ex)
+		{
+			System.out.println("dictionary wrong");
+		}
+		
+		Dictionary wordnet=Dictionary.getInstance();
+		
+		String can="";
+		try
+		{
+			if (pos.equals("VERB"))
+				can=wordnet.lookupIndexWord(POS.VERB, word).getLemma();
+			else if (pos.equals("ADJECTIVE"))
+				can=wordnet.lookupIndexWord(POS.ADJECTIVE, word).getLemma();
+			else if (pos.equals("NOUN"))
+				can=wordnet.lookupIndexWord(POS.NOUN, word).getLemma();
+			else if (pos.equals("ADVERB"))
+				can=wordnet.lookupIndexWord(POS.ADVERB, word).getLemma();
+		}
+		catch(Exception ex)
+		{
+			System.out.println("word wrong");
+		}
+		
+		return can;
+	}
+	
 	public void process(ChomskyData DATA)
 	{
-		// main processing procedures
+		// keep processing record for each word.
+		// record how many times the algorithm processed the word.
+		ArrayList<Integer> procRecord=initProcRecord(text.size());
+		
+		// First level: processing be-verb
+		
+		int noWords=text.size();
+		
+		for (int i=0;i<noWords;i++)
+		{
+			if (procRecord.get(i)==0 && checkMatch(text.get(i), DATA.beVerbDB))
+			{
+				String can=lookupBase("VERB", text.get(i));
+				procRecord.set(i, 1);
 				
-		// consider on number.
+				text.set(i, can);
+			}
+		}
+		
+		// Second level: Remove verbs with be
+		
+		int noCount=0;
+		while (noCount<text.size())
+		{
+			String word=text.get(noCount);
+			
+			if ((word.equals("be") || word.equals("seem")) && (noCount!=text.size()-1))
+			{
+				String nextWord=text.get(noCount+1);
+				
+				if (nextWord.contains("ing"))
+				{
+					// recover to base form
+					
+					String can=lookupBase("VERB", text.get(noCount+1));
+					
+					text.set(noCount+1, can);
+					
+					// remove be
+					text.remove(noCount);
+					procRecord.remove(noCount);
+					
+					// update verb
+					procRecord.set(noCount, 1);
+				}
+			}
+			
+			noCount++;
+		}
+		
+		// third level: remove useless words
+		
+		noCount=0;
+		while (noCount<text.size())
+		{
+			if (checkMatch(text.get(noCount), DATA.uselessDB))
+			{
+				text.remove(noCount);
+				procRecord.remove(noCount);
+			}
+			else noCount++;
+		}
+		
+		// fourth level: recover verb
+		
+		for (int i=0; i<text.size();i++)
+		{
+			if (procRecord.get(i)!=1 && !checkMatch(text.get(i), DATA.beVerbDB))
+			{
+				String can=lookupBase("VERB", text.get(i));
+				if (can.length()!=0)
+				{
+					text.set(i, can);
+					procRecord.set(i, 1);
+				}
+			}
+		}
+		
+		// fifth level: recover noun
+		// todo: define exception, preserve captial letters
+		
+		for (int i=0; i<text.size();i++)
+		{
+			if (procRecord.get(i)!=1)
+			{
+				String can=lookupBase("NOUN", text.get(i));
+				if (can.length()!=0)
+				{
+					text.set(i, can);
+					procRecord.set(i, 1);
+				}
+			}
+		}
+		
+		// to-do: refine special cases
 	}
 	
 	public String formText()

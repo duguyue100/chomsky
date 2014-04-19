@@ -134,7 +134,7 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 			String text=originalText.getText();
 			
 			TEXT=new ChomskyText(text);
-			//TEXT.process(DATA);
+			TEXT.process(DATA);
 			
 			processedText.setText(TEXT.formText());
 		}
