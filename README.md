@@ -19,6 +19,10 @@ This project is primarily for the assignment of WAES2108 Natural Language Proces
 
 Of course it is.
 
+####What is it look like?
+
+![ChomSky](/resource/ChomSky.png)
+
 ###Updates
 
 + GUI updates [20140415]
