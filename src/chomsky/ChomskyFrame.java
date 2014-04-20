@@ -14,9 +14,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class ChomskyFrame extends JFrame implements ActionListener {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1964200924007490868L;
 	JTextArea originalText;
 	JTextArea processedText;
@@ -124,12 +121,11 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 		
 		Object source=e.getSource();
 		
-		// exit button
-		if (source==exitButton)
+		if (source==exitButton) // exit button
 		{
 			System.exit(0);
 		}
-		else if (source==convertText)
+		else if (source==convertText) // convert button
 		{
 			String text=originalText.getText();
 			
@@ -138,7 +134,7 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 			
 			processedText.setText(TEXT.formText());
 		}
-		else if (source==loadTextButton)
+		else if (source==loadTextButton) // load text button
 		{
 			String inputFile="";
 			chooser = new JFileChooser();
@@ -171,7 +167,7 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 		    	originalText.setText(text);
 		    }
 		}
-		else if (source==exportResultButton)
+		else if (source==exportResultButton) // export button
 		{
 			String text=processedText.getText();
 			
@@ -196,12 +192,9 @@ public class ChomskyFrame extends JFrame implements ActionListener {
 			{
 				JOptionPane.showMessageDialog(null, "Empty data", "Empty data", JOptionPane.ERROR_MESSAGE);
 			}
-			// save to current directory
-			// updated to save dialog
 		}
-		else if (source==aboutButton)
+		else if (source==aboutButton) // about button
 		{
-			// add a window for about
 			String msg="WAES2108 Project\n"+
 						"Leong Chin Poh (WEK110029)\n"+
 						"Tey Eng Yao (WEK110062)\n"+

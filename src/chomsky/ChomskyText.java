@@ -11,21 +11,45 @@ import net.didion.jwnl.dictionary.Dictionary;
 public class ChomskyText {
 	private String rawText;
 	private ArrayList<String> text;
+	Dictionary wordnet;
 	
 	public ChomskyText()
 	{
 		rawText="";
 		text=new ArrayList<String>();
+		initJWNL();
 	}
 	
 	public ChomskyText(String inText)
 	{
 		rawText=inText;
 		text=processRawText(inText);
+		initJWNL();
 	}
 	
-	// processing
+	// Function: set up JWNL database.
+	public void initJWNL()
+	{
+		String propsFile="./resource/jwnl14-rc2/config/file_properties.xml";
+		
+		try
+		{
+			JWNL.initialize(new FileInputStream(propsFile));
+		}
+		catch (Exception ex)
+		{
+			System.out.println("dictionary wrong");
+		}
+		
+		wordnet=Dictionary.getInstance();
+	}
 	
+	// Function: remove punctuation from raw text.
+	// INPUT
+	// inText : raw text.
+	//
+	// OUTPUT
+	// ArrayList<String> : cleaned text.
 	public ArrayList<String> processRawText(String inText)
 	{
 		ArrayList<String> temp=new ArrayList<String>();
@@ -88,6 +112,12 @@ public class ChomskyText {
 		return temp;
 	}
 	
+	// Function: process word based on the rules (currently no rule).
+	// INPUT
+	// token : the original word.
+	//
+	// OUTPUT
+	// String : the processed word
 	public String processToken(String token)
 	{
 		String temp="";
@@ -103,9 +133,20 @@ public class ChomskyText {
 		return temp;
 	}
 	
+	// Function: check the type of the special word.
+	// INPUT
+	// before : character before current character. 
+	// now    : current character.
+	// after  : character after current character.
+	//
+	// OUTPUT
+	// 0, 1 : number.
+	// -    : license or ID.
+	// 3    : quote.
+	// -1   : none of them.
 	public int checkWord(char before, char now, char after)
 	{
-		if (before!=' ' && after!=' ')
+		if (before!=' ' && after!=' ' && after!='_')
 		{
 			if (now=='.') return 0;
 			if (now==',') return 1;
@@ -118,6 +159,12 @@ public class ChomskyText {
 		return -1;
 	}
 	
+	// Function: check if it is a valid token.
+	// INPUT
+	// token : the word to check.
+	//
+	// OUTPUT
+	// boolean : if the word is valid.
 	public boolean checkToken(String token)
 	{
 		if (token.isEmpty())
@@ -141,21 +188,36 @@ public class ChomskyText {
 		return true;
 	}
 	
+	// Function: set raw text.
+	// INPUT
+	// inText : raw text.
 	public void setRawText(String inText)
 	{
 		rawText=inText;
 	}
 	
+	// Function: get raw text.
+	// OUTPUT
+	// String : get raw text.
 	public String getRawText()
 	{
 		return rawText;
 	}
 	
+	// Function: get processed text.
+	// OUTPUT
+	// ArrayList<String> : get processed text.
 	public ArrayList<String> getText()
 	{
 		return text;
 	}
 	
+	// Function: initialize processing record to indicate if the word is processed.
+	// INPUT
+	// size : size of the word.
+	//
+	// OUTPUT
+	// ArrayList<Integer> : initialized processing record array list. 
 	public ArrayList<Integer> initProcRecord(int size)
 	{
 		ArrayList<Integer> temp=new ArrayList<Integer>();
@@ -165,6 +227,13 @@ public class ChomskyText {
 		return temp;
 	}
 	
+	// Function: check if the word match in a word list.
+	// INPUT
+	// word     : the word needed to check.
+	// wordList : the word list.
+	//
+	// OUTPUT
+	// boolean : if the word in the list.
 	public boolean checkMatch(String word, ArrayList<String> wordList)
 	{
 		for (int i=0;i<wordList.size();i++)
@@ -176,22 +245,15 @@ public class ChomskyText {
 		return false;
 	}
 	
+	// Function: look up the base form of a word. 
+	// INPUT
+	// pos  : part of speech of the word.
+	// word : original word.
+	//
+	// OUTPUT
+	// String : the base form of the word.
 	public String lookupBase(String pos, String word)
 	{
-		
-		String propsFile="./resource/jwnl14-rc2/config/file_properties.xml";
-		
-		try
-		{
-			JWNL.initialize(new FileInputStream(propsFile));
-		}
-		catch (Exception ex)
-		{
-			System.out.println("dictionary wrong");
-		}
-		
-		Dictionary wordnet=Dictionary.getInstance();
-		
 		String can="";
 		try
 		{
@@ -206,12 +268,15 @@ public class ChomskyText {
 		}
 		catch(Exception ex)
 		{
-			System.out.println("word wrong");
+			//System.out.println("word wrong");
 		}
 		
 		return can;
 	}
 	
+	// Function: in charge of main processing.
+	// INPUT
+	// DATA: contains various data set.
 	public void process(ChomskyData DATA)
 	{
 		// keep processing record for each word.
@@ -279,9 +344,9 @@ public class ChomskyText {
 		
 		// fourth level: recover verb
 		
-		for (int i=0; i<text.size();i++)
+		for (int i=1; i<text.size();i++)
 		{
-			if (procRecord.get(i)!=1 && !checkMatch(text.get(i), DATA.beVerbDB))
+			if (procRecord.get(i)!=1 && !(text.get(i-1).equals("be") || text.get(i-1).equals("seem") || text.get(i-1).equals("have")))
 			{
 				String can=lookupBase("VERB", text.get(i));
 				if (can.length()!=0)
@@ -311,6 +376,9 @@ public class ChomskyText {
 		// to-do: refine special cases
 	}
 	
+	// Function: form text from processed data
+	// OUTPUT
+	// String : formed text.
 	public String formText()
 	{
 		String outText="";
@@ -322,6 +390,7 @@ public class ChomskyText {
 		return outText;
 	}
 	
+	// Function: print out the processed text.
 	public void printText()
 	{
 		System.out.println(formText());

@@ -27,13 +27,13 @@ Of course it is.
 + File Output [20140416]
 + Special treatment on numbers and etc [20140416]
 + First complete version updated [20140419]
++ First refined version [20140420]
 
 ###To-do List
 
 + Consider fine-tuning rules
 + Consider special cases
 + Refine data structure
-+ clean code and add comment
 
 ###Notes
 
@@ -48,6 +48,15 @@ Of course it is.
 5. Some exceptions are needed. For example, JWNL is too strong on looking for base form, so it will change every letter in lower case. Such as "I"-->"i", "He"-->"he", we need some exception on it. Numbers are always a pain. Be careful. The word list I provided currently is not a complete version, please consider more.
 
 6. `lookupBase` method in `ChomskyText.java` is not a good implementation. It will reinitialise JWNL library every time it performed. So find a way to put it in the constructor or other places (I tried, but failed).
+
+7. Some known special cases we can process:
++ word with bar: MH-370
++ ordinary numbers: 1,990; 3.14; 2,450.12
++ license: ECK-2120-1241-12415
++ some URLs
+
+8. Some exceptions we known so far:
++ things: things can refer to person's belongs, so the system did not change it.
 
 ###Contacts
 

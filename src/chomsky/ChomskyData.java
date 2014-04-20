@@ -9,7 +9,6 @@ public class ChomskyData {
 	public ArrayList<String> beVerbDB;
 	public ArrayList<String> uselessDB;
 	
-	
 	public ChomskyData()
 	{
 		// init variables
@@ -19,11 +18,10 @@ public class ChomskyData {
 		// load all data
 		loadBeVerb();
 		loadUselessDB();
-		
-		// print data (optional)
-		//printBeVerb();
 	}
 	
+	// Function: load word set of useless words
+	// contains such as "a", "an", "the", etc
 	public void loadUselessDB()
 	{
 		Scanner input=null;
@@ -45,6 +43,7 @@ public class ChomskyData {
 		input.close();
 	}
 	
+	// Function: print out useless word list
 	public void printUselessDB()
 	{
 		System.out.println(uselessDB.size());
@@ -52,6 +51,7 @@ public class ChomskyData {
 			System.out.println(uselessDB.get(i));
 	}
 	
+	// Function: load be-verb
 	public void loadBeVerb()
 	{
 		Scanner input=null;
@@ -73,6 +73,7 @@ public class ChomskyData {
 		input.close();
 	}
 	
+	// Function: print be-verb
 	public void printBeVerb()
 	{
 		System.out.println(beVerbDB.size());
