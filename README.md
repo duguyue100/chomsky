@@ -50,13 +50,13 @@ Of course it is.
 6. `lookupBase` method in `ChomskyText.java` is not a good implementation. It will reinitialise JWNL library every time it performed. So find a way to put it in the constructor or other places (I tried, but failed).
 
 7. Some known special cases we can process:
-+ word with bar: MH-370
-+ ordinary numbers: 1,990; 3.14; 2,450.12
-+ license: ECK-2120-1241-12415
-+ some URLs
+  + word with bar: MH-370
+  + ordinary numbers: 1,990; 3.14; 2,450.12
+  + license: ECK-2120-1241-12415
+  + some URLs
 
 8. Some exceptions we known so far:
-+ things: things can refer to person's belongs, so the system did not change it.
+  + things: things can refer to person's belongs, so the system did not change it.
 
 ###Contacts
 
