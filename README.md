@@ -45,27 +45,27 @@ The project is exported as a runnable JAR file, you can either use GUI utilities
 
 1. Use GUI: open JAR file directly or type following command in terminal
 
-```
-java -jar chomsky.jar
-```
+   ```
+   java -jar chomsky.jar
+   ```
 
 2. Use Command Line: type following command in terminal
 
-```
-java -jar chomsky.jar -f <input file path> <output file path>
-```
+   ```
+   java -jar chomsky.jar -f <input file path> <output file path>
+   ```
 
 3. Help
 
-```
-java -jar chomsky.jar [-h|-help|--help]
-```
+   ```
+   java -jar chomsky.jar [-h|-help|--help]
+   ```
 
 4. Check version
 
-```
-java -jar chomsky.jar --version
-```
+   ```
+   java -jar chomsky.jar --version
+   ```
 
 ###Notes
 
