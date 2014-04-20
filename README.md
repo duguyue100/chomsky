@@ -39,6 +39,34 @@ Of course it is.
 + Consider special cases
 + Refine data structure
 
+###Usage
+
+The project is exported as a runnable JAR file, you can either use GUI utilities or Command Line utilities.
+
+1. Use GUI: open JAR file directly or type following command in terminal
+
+```
+java -jar chomsky.jar
+```
+
+2. Use Command Line: type following command in terminal
+
+```
+java -jar chomsky.jar -f <input file path> <output file path>
+```
+
+3. Help
+
+```
+java -jar chomsky.jar [-h|-help|--help]
+```
+
+4. Check version
+
+```
+java -jar chomsky.jar --version
+```
+
 ###Notes
 
 1. This repo is a Eclipse project developed under MacOS X, Eclipse Kepler and JavaSE-1.6, you can download the whole project and directly import to your Eclipse, shouldn't occur any problems. If it is, check your OS, Java installation and Eclipse release.
