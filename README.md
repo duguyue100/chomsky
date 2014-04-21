@@ -67,6 +67,50 @@ The project is exported as a runnable JAR file, you can either use GUI utilities
    java -jar chomsky.jar --version
    ```
 
+###Levels of Processing
+
+####Preprocessing
+
+1. Identify numbers, special words contains '.', ',', '-', '''. Replace them to special characters. (`processRawText`)
+
+2. Remove punctuation, current consideration:
+   ```
+   '_' (empty space), ',', '.', '!', '?', '()',
+   '[]', '<>', ';', '`'', '"', '-', '\n'
+   ```
+   (`processRawText`)
+
+3. Recover the special numbers format.
+
+####Processing
+
+1. First level: recover be-verb
+
+2. Second level: remove the verb be
+
+   'be playing' to 'play'
+
+   'be written' to 'be written'
+
+3. Third level: remove useless word, current consideration
+
+   ```
+   a, an, the, in, on, of, at, for,
+   to, into, this, that
+   ```
+
+4. Fourth level: recover verb
+
+   'wrote' to 'write'
+
+   'played' to 'play'
+
+5. Fifth level: recover noun
+
+   'apples' to 'apple'
+
+   'boxes' to 'box'
+
 ###Notes
 
 1. This repo is a Eclipse project developed under MacOS X, Eclipse Kepler and JavaSE-1.6, you can download the whole project and directly import to your Eclipse, shouldn't occur any problems. If it is, check your OS, Java installation and Eclipse release.
