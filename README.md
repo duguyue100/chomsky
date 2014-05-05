@@ -32,12 +32,11 @@ Of course it is.
 + Special treatment on numbers and etc [20140416]
 + First complete version updated [20140419]
 + First refined version [20140420]
++ Second refined version [20140505]
 
 ###To-do List
 
 + Consider fine-tuning rules
-+ Consider special cases
-+ Refine data structure
 
 ###Usage
 
@@ -121,7 +120,7 @@ The project is exported as a runnable JAR file, you can either use GUI utilities
 
 4. This project use JWNL library for identify the base form of the word. Problem is occurred on initialisation. Several configurations are needed, all on the path of the files. One of them is in `jwnl14-rc2/config/file_properties.xml`, open this file, change the last line to your WordNet-3.0 dictionary path on your machine.
 
-5. Some exceptions are needed. For example, JWNL is too strong on looking for base form, so it will change every letter in lower case. Such as "I"-->"i", "He"-->"he", we need some exception on it. Numbers are always a pain. Be careful. The word list I provided currently is not a complete version, please consider more.
+5. Some exceptions are needed. For example, JWNL is too strong on looking for base form, so it will change every letter in lower case. Such as "I"-->"i", "He"-->"he", we need some exception on it. Numbers are always a pain. Be careful. The word list I provided currently is not a complete version, please consider more. [SOLVED]
 
 6. `lookupBase` method in `ChomskyText.java` is not a good implementation. It will reinitialise JWNL library every time it performed. So find a way to put it in the constructor or other places (I tried, but failed).
 

@@ -282,10 +282,15 @@ public class ChomskyText {
 		// keep processing record for each word.
 		// record how many times the algorithm processed the word.
 		ArrayList<Integer> procRecord=initProcRecord(text.size());
+		ArrayList<Integer> initRecord=initProcRecord(text.size());
 		
 		// First level: processing be-verb
 		
 		int noWords=text.size();
+		
+		for (int i=0;i<noWords;i++)
+			if (text.get(i).charAt(0)>='A' && text.get(i).charAt(0)<='Z')
+				initRecord.set(i, 1);
 		
 		for (int i=0;i<noWords;i++)
 		{
@@ -293,7 +298,6 @@ public class ChomskyText {
 			{
 				String can=lookupBase("VERB", text.get(i));
 				procRecord.set(i, 1);
-				
 				text.set(i, can);
 			}
 		}
@@ -320,6 +324,7 @@ public class ChomskyText {
 					// remove be
 					text.remove(noCount);
 					procRecord.remove(noCount);
+					initRecord.remove(noCount);
 					
 					// update verb
 					procRecord.set(noCount, 1);
@@ -338,6 +343,7 @@ public class ChomskyText {
 			{
 				text.remove(noCount);
 				procRecord.remove(noCount);
+				initRecord.remove(noCount);
 			}
 			else noCount++;
 		}
@@ -374,6 +380,20 @@ public class ChomskyText {
 		}
 		
 		// to-do: refine special cases
+		
+		for (int i=0;i<text.size();i++)
+		{
+			if (initRecord.get(i)!=0)
+			{
+				String temp=text.get(i);
+				if (!(temp.charAt(0)>='A' && temp.charAt(0)<='Z'))
+				{
+					char firstChar=(char)(temp.charAt(0)-32);
+					temp=temp.replace(temp.charAt(0), firstChar);
+					text.set(i, temp);
+				}
+			}
+		}
 	}
 	
 	// Function: form text from processed data
